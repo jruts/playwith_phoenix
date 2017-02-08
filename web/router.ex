@@ -1,5 +1,6 @@
 defmodule PlaywithPhoenix.Router do
   use PlaywithPhoenix.Web, :router
+  require Ueberauth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,6 +19,14 @@ defmodule PlaywithPhoenix.Router do
 
     get "/", PageController, :index
   end
+
+  scope "/auth", PlaywithPhoenix do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    delete "/logout", AuthController, :delete
+  end 
 
   # Other scopes may use custom stacks.
   # scope "/api", PlaywithPhoenix do
